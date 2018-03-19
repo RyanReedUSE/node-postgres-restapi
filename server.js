@@ -29,7 +29,7 @@ app.use(function(req, res, next) {
 //////////////////
 // API Queries
 //////////////////
-app.use('/static', express.static(path.resolve(__dirname, './app')));
+app.use('/app', express.static(path.resolve(__dirname, './app')));
 app.get('/', (req, res) => res.redirect('/app/'));
 
 app.use('/', api);
