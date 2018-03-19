@@ -81,22 +81,7 @@
                 <th>Fleet</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>John</td>
-                <td>Doe</td>
-                <td>john@example.com</td>
-              </tr>
-              <tr>
-                <td>Mary</td>
-                <td>Moe</td>
-                <td>mary@example.com</td>
-              </tr>
-              <tr>
-                <td>July</td>
-                <td>Dooley</td>
-                <td>july@example.com</td>
-              </tr>
+            <tbody id="ships">
             </tbody>
           </table>
         </div>
@@ -165,6 +150,45 @@
 
   <!-- Custom scripts for this template -->
   <script src="js/grayscale.min.js"></script>
+
+  <script>
+    $(document).ready(function () {
+
+      $.ajax({
+        url: 'https://ryans-enterprise-fleet.herokuapp.com/api/starships',
+        type: 'GET',
+        async: true,
+        success(data, textStatus, statusText) {
+          var ships = data.data;
+          for (i = 0; i < ships.length; i++) {
+            $('#ships').append(`<tr><td>${ships[i].name}</td><td>${ships[i].captain}</td><td>${ships[i].affiliation}</td></tr>`);
+          }
+
+
+        },
+        error(x, e, data, textStatus, statusText) {
+          if (x.status === 0) {
+            bootbox.alert('You are offline!!\n Please Check Your Network.');
+          } else if (x.status === 404) {
+            bootbox.alert('Requested URL not found.');
+          } else if (x.status === 500) {
+            bootbox.alert('Internal Server Error.');
+          } else if (e === 'parsererror') {
+            bootbox.alert('Error.\nParsing JSON Request failed.');
+          } else if (e === 'timeout') {
+            bootbox.alert('Request Time out.');
+          } else {
+            bootbox.alert(`Unknow Error.\n${x.responseText}`);
+          }
+        },
+        contentType: 'application/json',
+        dataType: 'json'
+      });
+      console.log("ready!");
+    });
+  </script>
+
+
 
 </body>
 
